@@ -1,0 +1,118 @@
+{
+    "version": "0.2.0",
+    "inputs": [ // global variable
+        {
+            "id": "OTFILE",
+            "type": "promptString",
+            "description": "Output file name",
+            "default": "PersonalTools", // output binrary file name
+        },
+        {
+            "id": "GETPID",
+            "type": "command",
+            "command": "extension.pickNativeProcess",
+            "args": ["", ""]
+        },
+        {
+            "id": "MULGDB",
+            "type": "pickString",
+            "description": "Select MinGW GDB Platform",
+            "options": [ 
+                "E:/Runtime/Bins/MCF/x86/bin/gdb.exe",
+                "E:/Runtime/Bins/MCF/x64/bin/gdb.exe",
+            ],
+            "default": "E:/Runtime/Bins/MCF/x86/bin/gdb.exe",
+        },
+        {
+            "id": "GDBX86",
+            "type": "promptString",
+            "description": "MinGW GDB Path",
+            "default": "E:/Runtime/Bins/MCF/x86/bin/gdb.exe",
+        },
+        {
+            "id": "GDBX64",
+            "type": "promptString",
+            "description": "MinGW GDB Path",
+            "default": "E:/Runtime/Bins/MCF/x64/bin/gdb.exe",
+        },
+    ],
+    
+    "configurations": [
+        {
+            "preLaunchTask": "TKBuild-DLL",
+            "postDebugTask": "TaskKill-GDB",
+
+            "name": "Attach-Gdb_Beyond",
+            "type": "by-gdb",
+            "request": "attach",
+            "program": "${workspaceRoot}/Debug/lib${input:OTFILE}.dll",
+            "cwd": "${workspaceFolder}",
+            "processId": "${input:GETPID}",
+        },
+        {
+            "preLaunchTask": "TKBuild-EXE",
+            "postDebugTask": "TaskKill-GDB",
+
+            "name": "Launch-Gdb_Beyond",
+            "type": "by-gdb",
+            "request": "launch",
+            "program": "${workspaceRoot}/Debug/${input:OTFILE}.exe",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "preLaunchTask": "TKBuild-DLL",
+            "postDebugTask": "TaskKill-GDB",
+
+            "name": "Attach-Gdb",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceRoot}/Debug/lib${input:OTFILE}.dll",
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "${input:MULGDB}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description":  "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "preLaunchTask": "TKBuild-EXE",
+            "postDebugTask": "TaskKill-GDB",
+
+            "name": "Launch-Gdb",
+            "type": "cppdbg",
+            "request": "launch",
+
+            "program": "${workspaceRoot}/Debug/${input:OTFILE}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${input:MULGDB}",
+            "miDebuggerArgs": "c",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description":  "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+    ],
+}

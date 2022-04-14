@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "ARGBatch-EXE",
+            "type": "promptString",
+            "description": "Batch Args",
+            "default": "Debug exe",
+        },
+        {
+            "id": "ARGBatch-DLL",
+            "type": "promptString",
+            "description": "Batch Args",
+            "default": "Debug dll",
+        }
+    ],
+    "tasks": [
+        {
+            "label": "TaskKill-GDB",
+            "type": "process",
+            "command": "TASKKILL.EXE",
+            "args": [ "/IM", "GDB.EXE", "/T", "/F" ],
+        },
+        {
+            "label": "TKBuild-EXE",
+            "type": "shell",
+            "command": "${workspaceFolder}/CMakeScript.bat",
+            "args": [ "${input:ARGBatch-EXE}" ],
+            
+        },
+        {
+            "label": "TKBuild-DLL",
+            "type": "shell",
+            "command": "${workspaceFolder}/CMakeScript.bat",
+            "args": [ "${input:ARGBatch-DLL}" ],
+            
+        }
+    ]
+}
