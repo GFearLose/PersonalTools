@@ -23,5 +23,5 @@
 &emsp;&emsp;Build DLL Run command: ./CMakeScript.bat debug dll<br>
 &emsp;&emsp;Build LIB Run command: ./CMakeScript.bat debug lib<br>
 
-&emsp;other args: debug ,release ..., exe, dll, lib, cls, rb, x32, x64, 32, 64...
+&emsp;other args: debug ,release ..., exe, dll, lib, cls, rb, x32, x64, 32, 64...<br>
 &emsp;Args view CMakeSript.bat file.
