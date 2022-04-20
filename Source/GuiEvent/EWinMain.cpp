@@ -7,19 +7,28 @@
 #include <string>
 #include <vector>
 
-bool Init_SetControlStats(HWND hWndDlg);
-bool Init_GetWinOSVersion(HWND hWndDlg);
+bool Init_Main_SetControlStats(HWND hWndDlg);
+bool Init_Main_GetWinOSVersion(HWND hWndDlg);
 
-bool Find_GetDocumentPath(HWND hWndDlg);
-bool Exec_SetDocumentPath(HWND hWndDlg);
+bool Load_Main_GetWinOSDefault(HWND hWndDlg);
+bool Load_Main_GetDirConfigure(HWND hWndDlg);
+bool Find_Main_GetDocumentPath(HWND hWndDlg);
+bool Exec_Main_SetDocumentPath(HWND hWndDlg);
+
+std::vector<DWORD> vcDwEditId  = {ID_MAIN_EDESKTOP, ID_MAIN_EDOWNLOADS, ID_MAIN_EDOCUMENTS, ID_MAIN_EPITCTURES, ID_MAIN_EVIDEOS, ID_MAIN_EMUSIC, ID_MAIN_EOBJECTS3D, ID_MAIN_EHISTORY, ID_MAIN_ERECENT, ID_MAIN_EFAVORITES, ID_MAIN_ELINKS, ID_MAIN_EINETCACHE, ID_MAIN_EINETCOOKIES, ID_MAIN_ESAVEGAMES, ID_MAIN_ESEARCHES, ID_MAIN_ECONTANCTS, ID_MAIN_EROAMING};
+std::vector<DWORD> vcDwLabelId = {ID_MAIN_SDESKTOP, ID_MAIN_SDOWNLOADS, ID_MAIN_SDOCUMENTS, ID_MAIN_SPITCTURES, ID_MAIN_SVIDEOS, ID_MAIN_SMUSIC, ID_MAIN_SOBJECTS3D, ID_MAIN_SHISTORY, ID_MAIN_SRECENT, ID_MAIN_SFAVORITES, ID_MAIN_SLINKS, ID_MAIN_SINETCACHE, ID_MAIN_SINETCOOKIES, ID_MAIN_SSAVEGAMES, ID_MAIN_SSEARCHES, ID_MAIN_SCONTANCTS, ID_MAIN_SROAMING};
+std::vector<DWORD> vcDwCheckId = {ID_MAIN_CDESKTOP, ID_MAIN_CDOWNLOADS, ID_MAIN_CDOCUMENTS, ID_MAIN_CPITCTURES, ID_MAIN_CVIDEOS, ID_MAIN_CMUSIC, ID_MAIN_COBJECTS3D, ID_MAIN_CHISTORY, ID_MAIN_CRECENT, ID_MAIN_CFAVORITES, ID_MAIN_CLINKS, ID_MAIN_CINETCACHE, ID_MAIN_CINETCOOKIES, ID_MAIN_CSAVEGAMES, ID_MAIN_CSEARCHES, ID_MAIN_CCONTANCTS, ID_MAIN_CROAMING};
+
+std::vector<std::wstring> vcSubsKeys = {L"Desktop", L"Downloads", L"Documents", L"Pictures", L"Videos", L"Music", L"3D Objects", L"History", L"Recent", L"Favorites", L"Links", L"Cache", L"Cookies", L"Saved Games", L"Searches", L"Contacts", L"AppData\\Roaming"};
+std::vector<GUID> vcGuidKeys         = {FOLDERID_Desktop, FOLDERID_Downloads, FOLDERID_Documents, FOLDERID_Pictures, FOLDERID_Videos, FOLDERID_Music, FOLDERID_Objects3D, FOLDERID_History, FOLDERID_Recent, FOLDERID_Favorites, FOLDERID_Links, FOLDERID_InternetCache, FOLDERID_Cookies, FOLDERID_SavedGames, FOLDERID_SavedSearches, FOLDERID_Contacts, FOLDERID_RoamingAppData};
 
 int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        Init_SetControlStats(hWndDlg);
-        Init_GetWinOSVersion(hWndDlg);
+        Init_Main_SetControlStats(hWndDlg);
+        Init_Main_GetWinOSVersion(hWndDlg);
         break;
     case WM_CLOSE:
         EndDialog(hWndDlg, 0);
@@ -27,11 +36,17 @@ int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
+        case ID_MAIN_CWINDEFAULT:
+            Load_Main_GetWinOSDefault(hWndDlg);
+            break;
+        case ID_MAIN_CLOADCONFIG:
+            Load_Main_GetDirConfigure(hWndDlg);
+            break;
         case ID_MAIN_BBROWSE:
-            Find_GetDocumentPath(hWndDlg);
+            Find_Main_GetDocumentPath(hWndDlg);
             break;
         case ID_MAIN_BEXECUTE:
-            Exec_SetDocumentPath(hWndDlg);
+            Exec_Main_SetDocumentPath(hWndDlg);
             break;
         case ID_MAIN_BINFO:
             DialogBoxW(g_hInst, MAKEINTRESOURCEW(DLG_INFO), hWndDlg, (DLGPROC)DLG_WinInfo_Proc);
@@ -42,16 +57,12 @@ int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
         }
         break;
     }
+
     return FALSE;
 }
 
-bool Init_SetControlStats(HWND hWndDlg)
+bool Init_Main_SetControlStats(HWND hWndDlg)
 {
-    std::vector<DWORD> vcDwEditId  = {ID_MAIN_EDESKTOP, ID_MAIN_EDOWNLOADS, ID_MAIN_EDOCUMENTS, ID_MAIN_EPITCTURES, ID_MAIN_EVIDEOS, ID_MAIN_EMUSIC, ID_MAIN_EOBJECTS3D, ID_MAIN_EHISTORY, ID_MAIN_ERECENT, ID_MAIN_EFAVORITES, ID_MAIN_ELINKS, ID_MAIN_EINETCACHE, ID_MAIN_EINETCOOKIES, ID_MAIN_ESAVEGAMES, ID_MAIN_ESEARCHES, ID_MAIN_ECONTANCTS, ID_MAIN_EROAMING, ID_MAIN_ETEMP};
-    std::vector<DWORD> vcDwLabelId = {ID_MAIN_SDESKTOP, ID_MAIN_SDOWNLOADS, ID_MAIN_SDOCUMENTS, ID_MAIN_SPITCTURES, ID_MAIN_SVIDEOS, ID_MAIN_SMUSIC, ID_MAIN_SOBJECTS3D, ID_MAIN_SHISTORY, ID_MAIN_SRECENT, ID_MAIN_SFAVORITES, ID_MAIN_SLINKS, ID_MAIN_SINETCACHE, ID_MAIN_SINETCOOKIES, ID_MAIN_SSAVEGAMES, ID_MAIN_SSEARCHES, ID_MAIN_SCONTANCTS, ID_MAIN_SROAMING, ID_MAIN_STEMP};
-    std::vector<DWORD> vcDwCheckId = {ID_MAIN_CDESKTOP, ID_MAIN_CDOWNLOADS, ID_MAIN_CDOCUMENTS, ID_MAIN_CPITCTURES, ID_MAIN_CVIDEOS, ID_MAIN_CMUSIC, ID_MAIN_COBJECTS3D, ID_MAIN_CHISTORY, ID_MAIN_CRECENT, ID_MAIN_CFAVORITES, ID_MAIN_CLINKS, ID_MAIN_CINETCACHE, ID_MAIN_CINETCOOKIES, ID_MAIN_CSAVEGAMES, ID_MAIN_CSEARCHES, ID_MAIN_CCONTANCTS, ID_MAIN_CROAMING, ID_MAIN_CTEMP};
-    std::vector<GUID> vcGuidKeys   = {FOLDERID_Desktop, FOLDERID_Downloads, FOLDERID_Documents, FOLDERID_Pictures, FOLDERID_Videos, FOLDERID_Music, FOLDERID_Objects3D, FOLDERID_History, FOLDERID_Recent, FOLDERID_Favorites, FOLDERID_Links, FOLDERID_InternetCache, FOLDERID_Cookies, FOLDERID_SavedGames, FOLDERID_SavedSearches, FOLDERID_Contacts, FOLDERID_RoamingAppData, FOLDERID_Templates};
-
     for (int iCount = 0; iCount < vcGuidKeys.size(); iCount++)
     {
         PWCHAR szWBuffer = 0;
@@ -71,6 +82,16 @@ bool Init_SetControlStats(HWND hWndDlg)
     CheckDlgButton(hWndDlg, ID_MAIN_RMOVE, BST_CHECKED);
     CheckDlgButton(hWndDlg, ID_MAIN_RCOPY, BST_UNCHECKED);
     CheckDlgButton(hWndDlg, ID_MAIN_RNOACTION, BST_UNCHECKED);
+
+    // RegGetValue Temp && Tmp Environment
+    WCHAR szTempPath[MAX_PATH] = {0};
+    DWORD dwTempPath = MAX_PATH;
+    if(RegGetValueW(HKEY_CURRENT_USER, L"Environment", L"TEMP", RRF_RT_REG_SZ, NULL, szTempPath, &dwTempPath) != ERROR_SUCCESS)
+        RegGetValueW(HKEY_CURRENT_USER, L"Environment", L"TMP", RRF_RT_REG_SZ, NULL, szTempPath, &dwTempPath);
+    
+    SetDlgItemTextW(hWndDlg, ID_MAIN_ETEMP, szTempPath);
+    SetDlgItemTextW(hWndDlg, ID_MAIN_STEMP, L"11451419 GB");
+    CheckDlgButton(hWndDlg, ID_MAIN_CTEMP, BST_CHECKED);
 
     // Get Disk Folder
     WCHAR szWBuffer[MAX_PATH] = {0};
@@ -103,7 +124,7 @@ bool Init_SetControlStats(HWND hWndDlg)
     return true;
 }
 
-bool Init_GetWinOSVersion(HWND hWndDlg)
+bool Init_Main_GetWinOSVersion(HWND hWndDlg)
 {
     WCHAR szPlatform[MAX_PATH];
     ZeroMemory(szPlatform, sizeof(szPlatform));
@@ -122,22 +143,87 @@ bool Init_GetWinOSVersion(HWND hWndDlg)
     return true;
 }
 
+bool Load_Main_GetWinOSDefault(HWND hWndDlg)
+{
+    if (IsDlgButtonChecked(hWndDlg, ID_MAIN_CWINDEFAULT) == BST_CHECKED)
+    {
+        if(IsDlgButtonChecked(hWndDlg, ID_MAIN_CLOADCONFIG) == BST_CHECKED)
+            CheckDlgButton(hWndDlg, ID_MAIN_CLOADCONFIG, BST_UNCHECKED);
+
+        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        {
+            EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), false);
+            EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), false);
+        }
+
+        // Temp Control
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_ETEMP), false);
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_CTEMP), false);
+    }
+    else
+    {
+        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        {
+            EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), true);
+            EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), true);
+        }
+
+        // Temp Control
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_ETEMP), true);
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_CTEMP), true);
+    }
+
+    return true;
+}
+
+bool Load_Main_GetDirConfigure(HWND hWndDlg)
+{
+    if (IsDlgButtonChecked(hWndDlg, ID_MAIN_CLOADCONFIG) == BST_CHECKED)
+    {
+        if(IsDlgButtonChecked(hWndDlg, ID_MAIN_CWINDEFAULT) == BST_CHECKED)
+            CheckDlgButton(hWndDlg, ID_MAIN_CWINDEFAULT, BST_UNCHECKED);
+            
+        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        {
+            EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), false);
+            EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), false);
+        }
+
+        // Temp Control
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_ETEMP), false);
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_CTEMP), false);
+    }
+    else
+    {
+        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        {
+            EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), true);
+            EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), true);
+        }
+
+        // Temp Control
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_ETEMP), true);
+        EnableWindow(GetDlgItem(hWndDlg, ID_MAIN_CTEMP), true);
+    }
+
+    return true;
+}
+
 int __stdcall DLG_Browser_Proc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
     switch (uMsg)
     {
     case BFFM_INITIALIZED:
-    {
         // const wchar_t *szResult = (const wchar_t *)lpData;
         // printf("Path: %s\n");
         SendMessage(hwnd, BFFM_SETSELECTIONW, TRUE, lpData);
         return TRUE;
-    }
+    
     }
     return FALSE;
 }
 
-bool Find_GetDocumentPath(HWND hWndDlg)
+bool Find_Main_GetDocumentPath(HWND hWndDlg)
 {
     BROWSEINFOW hBrowseInfo = {0};
     LPITEMIDLIST hItemIDList = 0;
@@ -166,7 +252,7 @@ bool Find_GetDocumentPath(HWND hWndDlg)
     return true;
 }
 
-long Path_SetNewPathCheck(REFKNOWNFOLDERID pUidFolderId, PCWSTR pszTargetPath)
+long Path_Main_SetNewPathCheck(REFKNOWNFOLDERID pUidFolderId, PCWSTR pszTargetPath)
 {
     long lErrCode = 0;
     long lRetCode = GetFileAttributesW(pszTargetPath);
@@ -192,11 +278,8 @@ long Path_SetNewPathCheck(REFKNOWNFOLDERID pUidFolderId, PCWSTR pszTargetPath)
     return 0;
 }
 
-bool Exec_SetDocumentPath(HWND hWndDlg)
+bool Exec_Main_SetDocumentPath(HWND hWndDlg)
 {
-    std::vector<std::wstring> vcSubsKeys = {L"Desktop", L"Downloads", L"Documents", L"Pictures", L"Videos", L"Music", L"3D Objects", L"History", L"Recent", L"Favorites", L"Links", L"Cache", L"Cookies", L"Saved Games", L"Searches", L"Contacts", L"AppData\\Roaming", L"Windows\\Templates"};
-    std::vector<GUID> vcGuidKeys         = {FOLDERID_Desktop, FOLDERID_Downloads, FOLDERID_Documents, FOLDERID_Pictures, FOLDERID_Videos, FOLDERID_Music, FOLDERID_Objects3D, FOLDERID_History, FOLDERID_Recent, FOLDERID_Favorites, FOLDERID_Links, FOLDERID_InternetCache, FOLDERID_Cookies, FOLDERID_SavedGames, FOLDERID_SavedSearches, FOLDERID_Contacts, FOLDERID_RoamingAppData, FOLDERID_Templates};
-
     WCHAR szWRootPath[MAX_PATH] = {0};
     GetDlgItemTextW(hWndDlg, ID_MAIN_ETARGETFOLDER, szWRootPath, sizeof(szWRootPath));
 
@@ -213,8 +296,36 @@ bool Exec_SetDocumentPath(HWND hWndDlg)
         PWCHAR szWOldPath = 0;
         SHGetKnownFolderPath(vcGuidKeys[iCount], KF_FLAG_CREATE, 0, &szWOldPath);
         // wprintf_s(L"[*] %s: %s -> %s\n", vcSubsKeys[iCount].c_str(), szWOldPath, szWNewPath);
-        Path_SetNewPathCheck(vcGuidKeys[iCount], szWNewPath);
+        Path_Main_SetNewPathCheck(vcGuidKeys[iCount], szWNewPath);
     }
+
+    // RegSetValue Temp && Tmp Environment
+    HKEY hKeyData = 0;
+    WCHAR szWTempPath[MAX_PATH] = {0};
+    long lRetCode = RegOpenKeyExW(HKEY_CURRENT_USER, L"Environment", 0, KEY_ALL_ACCESS, &hKeyData);
+    if(lRetCode != ERROR_SUCCESS)
+    {
+        wprintf_s(L"[x] RegOpenKeyExW Error code: %d\n", lRetCode);
+        return false;
+    }
+    else
+    {
+        swprintf_s(szWTempPath, L"%s\\Temp", szWRootPath);
+        if(GetFileAttributesW(szWTempPath) == INVALID_FILE_ATTRIBUTES)
+        {
+            lRetCode = SHCreateDirectory(0, szWTempPath);
+            if (lRetCode != ERROR_SUCCESS)
+            {
+                lRetCode = GetLastError();
+                wprintf_s(L"[x] SHCreateDirectory Error for Temp folder code: %d\n", lRetCode);
+                return false;
+            }
+        }
+
+        RegSetValueExW(hKeyData, L"TEMP", 0, REG_EXPAND_SZ, (PBYTE)szWTempPath, sizeof(szWTempPath));
+        RegSetValueExW(hKeyData, L"TMP", 0, REG_EXPAND_SZ, (PBYTE)szWTempPath, sizeof(szWTempPath));
+    }
+    
 
     if (IsDlgButtonChecked(hWndDlg, ID_MAIN_RMOVE) == BST_CHECKED)
     {

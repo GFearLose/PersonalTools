@@ -5,6 +5,4 @@
 
 int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-
-
-#endif  // SOURCE_GUIEVENT_EWINMAIN_H_
+#endif // SOURCE_GUIEVENT_EWINMAIN_H_
