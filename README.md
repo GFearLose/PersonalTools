@@ -1,4 +1,4 @@
-![image](https://github.com/GFearLose/PersonalTools/raw/master/GuiMain.png)
+![image](https://github.com/GFearLose/PersonalTools/raw/master/GuiMain.jpg)
 # PersonalTools - WinOS (Only)
 - Tools&Platform:<br>
 &emsp;Visual Studio Code<br>
