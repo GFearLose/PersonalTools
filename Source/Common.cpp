@@ -3,48 +3,6 @@
 
 void PATHGetInformation()
 {
-#ifndef _DEBUG
-    wchar_t *szBuffer = {0};
-    SHGetKnownFolderPath(FOLDERID_AppCaptures, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);      // D:\Personal\Videos\Captures
-    SHGetKnownFolderPath(FOLDERID_AppDataDesktop, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);   // C:\Users\FearLose\AppData\Local\Desktop
-    SHGetKnownFolderPath(FOLDERID_AppDataDocuments, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // C:\Users\FearLose\AppData\Local\Documents
-    SHGetKnownFolderPath(FOLDERID_AppDataFavorites, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // C:\Users\FearLose\AppData\Local\Favorites
-
-    SHGetKnownFolderPath(FOLDERID_Contacts, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);      // D:\Personal\Contacts
-    SHGetKnownFolderPath(FOLDERID_Cookies, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);       // D:\Personal\Cookies
-    SHGetKnownFolderPath(FOLDERID_Desktop, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);       // D:\Personal\Desktop
-    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);     // D:\Personal\Documents
-    SHGetKnownFolderPath(FOLDERID_Downloads, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);     // D:\Personal\Downloads
-    SHGetKnownFolderPath(FOLDERID_Favorites, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);     // D:\Personal\Favorites
-    SHGetKnownFolderPath(FOLDERID_History, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);       // D:\Personal\History
-    SHGetKnownFolderPath(FOLDERID_InternetCache, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Cache
-    SHGetKnownFolderPath(FOLDERID_Links, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);         // D:\Personal\Links
-
-    SHGetKnownFolderPath(FOLDERID_LocalDocuments, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Documents
-    SHGetKnownFolderPath(FOLDERID_LocalDownloads, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Downloads
-    SHGetKnownFolderPath(FOLDERID_LocalMusic, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);     // C:\Users\FearLose\Music
-    SHGetKnownFolderPath(FOLDERID_LocalPictures, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);  // C:\Users\FearLose\Pictures
-    SHGetKnownFolderPath(FOLDERID_LocalVideos, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);    // C:\Users\FearLose\Videos
-
-    SHGetKnownFolderPath(FOLDERID_Music, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);       // D:\Personal\Music
-    SHGetKnownFolderPath(FOLDERID_Objects3D, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);   // C:\Users\FearLose\3D-Objects
-    SHGetKnownFolderPath(FOLDERID_Pictures, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);    // D:\Personal\Pictures
-    SHGetKnownFolderPath(FOLDERID_PhotoAlbums, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Pictures\Slide-Shows
-
-    SHGetKnownFolderPath(FOLDERID_Recent, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Recent
-
-    SHGetKnownFolderPath(FOLDERID_SavedGames, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);    // D:\Personal\Saved Games
-    SHGetKnownFolderPath(FOLDERID_SavedPictures, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Pictures\Saved-Pictures
-    SHGetKnownFolderPath(FOLDERID_SavedSearches, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Searches
-    SHGetKnownFolderPath(FOLDERID_Screenshots, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer);   // D:\Personal\Pictures\Screenshots
-
-    SHGetKnownFolderPath(FOLDERID_Videos, KF_FLAG_CREATE, 0, &szBuffer) & wprintf_s(L"%ls\n", szBuffer); // D:\Personal\Videos
-#endif // _DEBUG
-}
-
-void ShowAllPathInfomathon()
-{
-#ifndef _DEBUG
     PWSTR wPath = 0;
     SHGetKnownFolderPath(FOLDERID_AccountPictures, KF_FLAG_CREATE, 0, &wPath) & wprintf(L"%ls\n", wPath);
     SHGetKnownFolderPath(FOLDERID_AddNewPrograms, KF_FLAG_CREATE, 0, &wPath) & wprintf(L"%ls\n", wPath);
@@ -187,124 +145,22 @@ void ShowAllPathInfomathon()
     SHGetKnownFolderPath(FOLDERID_Videos, KF_FLAG_CREATE, 0, &wPath) & wprintf(L"%ls\n", wPath);
     SHGetKnownFolderPath(FOLDERID_VideosLibrary, KF_FLAG_CREATE, 0, &wPath) & wprintf(L"%ls\n", wPath);
     SHGetKnownFolderPath(FOLDERID_Windows, KF_FLAG_CREATE, 0, &wPath);
-#endif //_DEBUG
 }
 
-int PATHExecuteW(REFKNOWNFOLDERID pUidFolderId, PCWSTR pszTargetPath)
+int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    long lErrCode = 0;
-    long lRetCode = GetFileAttributesW(pszTargetPath);
-    if (lRetCode == INVALID_FILE_ATTRIBUTES)
-    {
-        lRetCode = SHCreateDirectory(0, pszTargetPath);
-        if (lRetCode != ERROR_SUCCESS)
-        {
-            lErrCode = GetLastError();
-            wprintf_s(L"[x] SHCreateDirectory Error code: %d\n", lErrCode);
-            return lErrCode;
-        }
-    }
+    PATHGetInformation();
 
-    // Get origin szDirPath
-    // Set new dirpath and move folder information
-    lRetCode = SHSetKnownFolderPath(pUidFolderId, 0, NULL, pszTargetPath);
-    if (lRetCode != S_OK)
-    {
-        lErrCode = GetLastError();
-        wprintf_s(L"[x] SHSetKnownFolderPath Error code: %d\n", lErrCode);
-        return lErrCode;
-    }
+    // Initialize the library.
+    g_hInst = hInstance;
+    g_hInstPrev = hPrevInstance;
 
-    // using SHFileOperationA api
-    // using ExitWindowsEx api
-    // using system("P.S KILL Explorer") or TerminateProcess -> Kill Explorer ... api
-    return 0;
-}
+    INITCOMMONCONTROLSEX InitCtrls = {0};
+    InitCtrls.dwSize = sizeof(INITCOMMONCONTROLSEX);
+    InitCtrls.dwICC = ICC_WIN95_CLASSES;
+    InitCommonControlsEx(&InitCtrls);
+    // InitCommonControls();
 
-void PATHSetInformation()
-{
-    const wchar_t *szRoot = L"C:\\Personal";
-    const wchar_t *szSubKey[] = {L"Videos\\Captures", L"Local\\Desktop", L"Local\\Documents", L"Local\\Favorites", L"Contacts", L"Cookies", L"Desktop", L"Documents", L"Downloads", L"Favorites", L"History", L"Cache", L"Links", L"Documents", L"Downloads", L"Music", L"Pictures", L"Videos", L"Music", L"Videos", L"Recent", L"Pictures", L"3D Objects", L"Pictures\\Slide Shows", L"Saved Games", L"Pictures\\Saved Pictures", L"Searches", L"Pictures\\Screenshots"};
-    const GUID hKFolderID[] = {FOLDERID_AppCaptures, FOLDERID_AppDataDesktop, FOLDERID_AppDataDocuments, FOLDERID_AppDataFavorites, FOLDERID_Contacts, FOLDERID_Cookies, FOLDERID_Desktop, FOLDERID_Documents, FOLDERID_Downloads, FOLDERID_Favorites, FOLDERID_History, FOLDERID_InternetCache, FOLDERID_Links, FOLDERID_LocalDocuments, FOLDERID_LocalDownloads, FOLDERID_LocalMusic, FOLDERID_LocalPictures, FOLDERID_LocalVideos, FOLDERID_Music, FOLDERID_Videos, FOLDERID_Recent, FOLDERID_Pictures, FOLDERID_Objects3D, FOLDERID_PhotoAlbums, FOLDERID_SavedGames, FOLDERID_SavedPictures, FOLDERID_SavedSearches, FOLDERID_Screenshots};
-
-    // Kill Process
-    // system("TASKKILL /IM EXPLORER.EXE /T /F");
-
-    for (int iCount = 0; iCount < 28; iCount++)
-    {
-        wchar_t *szNewPath = 0;
-        wchar_t *szOldPath = 0;
-        wchar_t szBuffer[MAX_PATH] = {0};
-
-        wcscat_s(szBuffer, szRoot);
-        if (szSubKey[iCount][0] != '\\')
-            wcscat_s(szBuffer, L"\\") & wcscat_s(szBuffer, szSubKey[iCount]);
-        else
-            wcscat_s(szBuffer, szSubKey[iCount]);
-
-        // Give to wchar_t();
-        szNewPath = (wchar_t *)szBuffer;
-
-        SHGetKnownFolderPath(hKFolderID[iCount], KF_FLAG_CREATE, 0, &szOldPath);
-        PATHExecuteW(hKFolderID[iCount], szNewPath);
-
-        // Move Directory and Files
-    }
-
-    // Logoff
-    // ExitWindowsEx(EWX_LOGOFF, 0);
-}
-
-int IsRunasAdmin()
-{
-#ifndef _DEBUG
-    DWORD dwElevated = 0;
-    HANDLE hToken = 0;
-
-    // Get current process token
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
-        return 0;
-
-    TOKEN_ELEVATION tokenEle;
-    DWORD dwRetLen = 0;
-
-    // Retrieve token elevation information
-    if (GetTokenInformation(hToken, TokenElevation, &tokenEle, sizeof(tokenEle), &dwRetLen))
-    {
-        if (dwRetLen == sizeof(tokenEle))
-            dwElevated = tokenEle.TokenIsElevated;
-    }
-
-    CloseHandle(hToken);
-    return dwElevated;
-#endif _DEBUG
-}
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
-{
-    // if(IsRunasAdmin())
-    // {
-    //     wprintf_s(L"You have not administrator permission\n");
-    //     return -1;
-    // }
-
-    int isMode = 2;
-    switch (isMode)
-    {
-    case 0:
-        PATHGetInformation();
-        break;
-    case 1:
-        ShowAllPathInfomathon();
-        break;
-    case 2:
-        PATHSetInformation();
-        break;
-    }
-
-#ifndef _DEBUG
-    system("pause");
-#endif // _DEBUG
-
-    return 0;
+    int iResult = DialogBoxW(hInstance, MAKEINTRESOURCEW(DLG_MAIN), NULL, (DLGPROC)DLG_WinMain_Proc);
+    return iResult;
 }

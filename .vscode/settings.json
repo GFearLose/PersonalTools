@@ -7,11 +7,5 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true
     },
-    "hide-files.files": [],
-    "files.associations": {
-        "*.tcc": "cpp",
-        "fstream": "cpp",
-        "filesystem": "cpp"
-    },
-    "cmake.configureOnOpen": false
+    "hide-files.files": []
 }

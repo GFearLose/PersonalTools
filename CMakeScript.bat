@@ -2,7 +2,7 @@
 @REM @ECHO OFF & PUSHD %~DP0 & TITLE
 @REM Obfuscation batch: FEFF0D0A
 
->NUL 2>&1 REG.exe query "HKU\S-1-5-19" || (
+>NUL 2>&1 REG.eXE query "HKU\S-1-5-19" || (
     ECHO SET UAC = CreateObject^("Shell.Application"^) > "%TEMP%\Getadmin.vbs"
     ECHO UAC.ShellExecute "%~f0", "%1", "", "runas", 1 >> "%TEMP%\Getadmin.vbs"
     "%TEMP%\Getadmin.vbs"
@@ -12,12 +12,12 @@
 
 IF EXIST "%Public%" >NUL 2>&1 REG QUERY "HKU\S-1-5-19\Environment"
 IF NOT %errorlevel% EQU 0 (
-    IF EXIST "%Public%" powershell.exe -windowstyle hidden -noprofile "Start-Process '%~dpnx0' -Verb RunAs"
+    IF EXIST "%Public%" POWERSHELL.EXE -windowstyle hidden -noprofile "Start-Process '%~dpnx0' -Verb RunAs"
     EXIT
 )>NUL
 
 ::@ECHO OFF&(PUSHD "%~DP0")&(REG QUERY "HKU\S-1-5-19">NUL 2>&1)||(
-::powershell -Command "Start-Process '%~sdpnx0' -Verb RunAs"&&EXIT)
+::POWERSHELL.EXE -Command "Start-Process '%~sdpnx0' -Verb RunAs"&&EXIT)
 
 ::VER|FINDSTR "5\.[0-9]\.[0-9][0-9]*" > NUL && (
 ::ECHO.&ECHO  WinOS Not Supported WinXP &PAUSE>NUL&EXIT)
