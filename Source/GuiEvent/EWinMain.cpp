@@ -19,7 +19,7 @@ std::vector<DWORD> vcDwEditId  = {ID_MAIN_EDESKTOP, ID_MAIN_EDOWNLOADS, ID_MAIN_
 std::vector<DWORD> vcDwLabelId = {ID_MAIN_SDESKTOP, ID_MAIN_SDOWNLOADS, ID_MAIN_SDOCUMENTS, ID_MAIN_SPITCTURES, ID_MAIN_SVIDEOS, ID_MAIN_SMUSIC, ID_MAIN_SOBJECTS3D, ID_MAIN_SHISTORY, ID_MAIN_SRECENT, ID_MAIN_SFAVORITES, ID_MAIN_SLINKS, ID_MAIN_SINETCACHE, ID_MAIN_SINETCOOKIES, ID_MAIN_SSAVEGAMES, ID_MAIN_SSEARCHES, ID_MAIN_SCONTANCTS, ID_MAIN_SROAMING};
 std::vector<DWORD> vcDwCheckId = {ID_MAIN_CDESKTOP, ID_MAIN_CDOWNLOADS, ID_MAIN_CDOCUMENTS, ID_MAIN_CPITCTURES, ID_MAIN_CVIDEOS, ID_MAIN_CMUSIC, ID_MAIN_COBJECTS3D, ID_MAIN_CHISTORY, ID_MAIN_CRECENT, ID_MAIN_CFAVORITES, ID_MAIN_CLINKS, ID_MAIN_CINETCACHE, ID_MAIN_CINETCOOKIES, ID_MAIN_CSAVEGAMES, ID_MAIN_CSEARCHES, ID_MAIN_CCONTANCTS, ID_MAIN_CROAMING};
 
-std::vector<std::wstring> vcSubsKeys = {L"Desktop", L"Downloads", L"Documents", L"Pictures", L"Videos", L"Music", L"3D Objects", L"History", L"Recent", L"Favorites", L"Links", L"Cache", L"Cookies", L"Saved Games", L"Searches", L"Contacts", L"AppData\\Roaming"};
+std::vector<std::wstring> vcSubsKeys = {L"Desktop", L"Downloads", L"Documents", L"Pictures", L"Videos", L"Music", L"3D Objects", L"History", L"Recent Items", L"Favorites", L"Links", L"Cache", L"Cookies", L"Saved Games", L"Searches", L"Contacts", L"AppData\\Roaming"};
 std::vector<GUID> vcGuidKeys         = {FOLDERID_Desktop, FOLDERID_Downloads, FOLDERID_Documents, FOLDERID_Pictures, FOLDERID_Videos, FOLDERID_Music, FOLDERID_Objects3D, FOLDERID_History, FOLDERID_Recent, FOLDERID_Favorites, FOLDERID_Links, FOLDERID_InternetCache, FOLDERID_Cookies, FOLDERID_SavedGames, FOLDERID_SavedSearches, FOLDERID_Contacts, FOLDERID_RoamingAppData};
 
 int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -214,11 +214,7 @@ int __stdcall DLG_Browser_Proc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpDat
     switch (uMsg)
     {
     case BFFM_INITIALIZED:
-        // const wchar_t *szResult = (const wchar_t *)lpData;
-        // printf("Path: %s\n");
-        SendMessage(hwnd, BFFM_SETSELECTIONW, TRUE, lpData);
         return TRUE;
-    
     }
     return FALSE;
 }
@@ -231,21 +227,12 @@ bool Find_Main_GetDocumentPath(HWND hWndDlg)
     hBrowseInfo.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
     hBrowseInfo.lpfn = DLG_Browser_Proc;
     hBrowseInfo.hwndOwner = hWndDlg;
-    hItemIDList = SHBrowseForFolderW(&hBrowseInfo);
 
+    hItemIDList = SHBrowseForFolderW(&hBrowseInfo);
     if (hItemIDList != 0)
     {
         WCHAR szWBuffer[MAX_PATH] = {0};
         SHGetPathFromIDListW(hItemIDList, szWBuffer);
-
-        // free memory used
-        IMalloc *imalloc = 0;
-        if (SUCCEEDED(SHGetMalloc(&imalloc)))
-        {
-            imalloc->Free(&hBrowseInfo);
-            imalloc->Release();
-        }
-
         SetDlgItemTextW(hWndDlg, ID_MAIN_ETARGETFOLDER, szWBuffer);
         return true;
     }

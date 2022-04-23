@@ -14,5 +14,5 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
     // InitCommonControls();
 
     int iResult = DialogBoxW(hInstance, MAKEINTRESOURCEW(DLG_MAIN), NULL, (DLGPROC)DLG_WinMain_Proc);
-    return iResult;
+    return 0;
 }
