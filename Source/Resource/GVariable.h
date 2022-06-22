@@ -5,15 +5,15 @@
 
 #ifndef STATIC
 #define STATIC static
-#endif // STATIC
+#endif /* STATIC */
 
 #ifndef EXTERN
 #define EXTERN extern
-#endif // EXTERN
+#endif /* EXTERN */
 
 #include <windows.h>
 
-STATIC HINSTANCE g_hInst;
-STATIC HINSTANCE g_hInstPrev;
+STATIC HINSTANCE g_hInstance = nullptr;
+STATIC HINSTANCE g_hInstPrev = nullptr;
 
 #endif  // SOURCE_RESOURCE_GVARIABLE_H_

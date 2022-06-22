@@ -49,7 +49,7 @@ int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
             Exec_Main_SetDocumentPath(hWndDlg);
             break;
         case ID_MAIN_BINFO:
-            DialogBoxW(g_hInst, MAKEINTRESOURCEW(DLG_INFO), hWndDlg, (DLGPROC)DLG_WinInfo_Proc);
+            DialogBoxW(g_hInstance, MAKEINTRESOURCEW(DLG_INFO), hWndDlg, (DLGPROC)DLG_WinInfo_Proc);
             break;
         case ID_MAIN_BCANCEL:
             EndDialog(hWndDlg, 0);
@@ -63,7 +63,7 @@ int __stdcall DLG_WinMain_Proc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 
 bool Init_Main_SetControlStats(HWND hWndDlg)
 {
-    for (int iCount = 0; iCount < vcGuidKeys.size(); iCount++)
+    for (std::size_t iCount = 0; iCount < vcGuidKeys.size(); iCount++)
     {
         PWCHAR szWBuffer = 0;
         SHGetKnownFolderPath(vcGuidKeys[iCount], 0, NULL, &szWBuffer);
@@ -95,7 +95,7 @@ bool Init_Main_SetControlStats(HWND hWndDlg)
 
     // Get Disk Folder
     WCHAR szWBuffer[MAX_PATH] = {0};
-    DWORD dwLength = GetLogicalDriveStringsW(sizeof(szWBuffer) / sizeof(WCHAR), szWBuffer);
+    // DWORD dwLength = GetLogicalDriveStringsW(sizeof(szWBuffer) / sizeof(WCHAR), szWBuffer);
 
     DWORD dwLocked = 0;
     for (PWCHAR szDrive = szWBuffer; *szDrive; szDrive += wcslen(szDrive) + 1)
@@ -150,7 +150,7 @@ bool Load_Main_GetWinOSDefault(HWND hWndDlg)
         if(IsDlgButtonChecked(hWndDlg, ID_MAIN_CLOADCONFIG) == BST_CHECKED)
             CheckDlgButton(hWndDlg, ID_MAIN_CLOADCONFIG, BST_UNCHECKED);
 
-        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        for (std::size_t iCount = 0; iCount < vcDwEditId.size(); iCount++)
         {
             EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), false);
             EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), false);
@@ -162,7 +162,7 @@ bool Load_Main_GetWinOSDefault(HWND hWndDlg)
     }
     else
     {
-        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        for (std::size_t iCount = 0; iCount < vcDwEditId.size(); iCount++)
         {
             EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), true);
             EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), true);
@@ -183,7 +183,7 @@ bool Load_Main_GetDirConfigure(HWND hWndDlg)
         if(IsDlgButtonChecked(hWndDlg, ID_MAIN_CWINDEFAULT) == BST_CHECKED)
             CheckDlgButton(hWndDlg, ID_MAIN_CWINDEFAULT, BST_UNCHECKED);
             
-        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        for (std::size_t iCount = 0; iCount < vcDwEditId.size(); iCount++)
         {
             EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), false);
             EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), false);
@@ -195,7 +195,7 @@ bool Load_Main_GetDirConfigure(HWND hWndDlg)
     }
     else
     {
-        for (int iCount = 0; iCount < vcDwEditId.size(); iCount++)
+        for (std::size_t iCount = 0; iCount < vcDwEditId.size(); iCount++)
         {
             EnableWindow(GetDlgItem(hWndDlg, vcDwEditId[iCount]), true);
             EnableWindow(GetDlgItem(hWndDlg, vcDwCheckId[iCount]), true);
@@ -242,7 +242,7 @@ bool Find_Main_GetDocumentPath(HWND hWndDlg)
 long Path_Main_SetNewPathCheck(REFKNOWNFOLDERID pUidFolderId, PCWSTR pszTargetPath)
 {
     long lErrCode = 0;
-    long lRetCode = GetFileAttributesW(pszTargetPath);
+    DWORD lRetCode = GetFileAttributesW(pszTargetPath);
     if (lRetCode == INVALID_FILE_ATTRIBUTES)
     {
         lRetCode = SHCreateDirectory(0, pszTargetPath);
@@ -270,12 +270,12 @@ bool Exec_Main_SetDocumentPath(HWND hWndDlg)
     WCHAR szWRootPath[MAX_PATH] = {0};
     GetDlgItemTextW(hWndDlg, ID_MAIN_ETARGETFOLDER, szWRootPath, sizeof(szWRootPath));
 
-    for (int iCount = 0; iCount < vcGuidKeys.size(); iCount++)
+    for (std::size_t iCount = 0; iCount < vcGuidKeys.size(); iCount++)
     {
         WCHAR szWBuffer[MAX_PATH] = {0};
         wcscat_s(szWBuffer, szWRootPath);
         if (vcSubsKeys[iCount][0] != '\\')
-            wcscat_s(szWBuffer, L"\\") & wcscat_s(szWBuffer, vcSubsKeys[iCount].c_str());
+            wcscat_s(szWBuffer, L"\\") && wcscat_s(szWBuffer, vcSubsKeys[iCount].c_str());
         else
             wcscat_s(szWBuffer, vcSubsKeys[iCount].c_str());
 

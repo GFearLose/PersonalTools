@@ -3,96 +3,106 @@
 #ifndef SOURCE_OSDEFINEDS_H_
 #define SOURCE_OSDEFINEDS_H_
 
-//---------------------------------------------------------------//
-//                     Register build symbol                     //
-
-// Register to header file symbol Force wide characters ?
-// TODO: wchar   WinAPIA/W();
-//        Use UTF-8 ?
+// Setting build encode flags options
+// TODO: Build Win32 API using A/W
 
 #ifndef UNICODE
 #define UNICODE
-#endif
+#endif /* UNICODE */
 
 #ifndef _UNICODE
 #define _UNICODE
-#endif
+#endif /* _UNICODE */
 
-// Window default using ?
-// TODO: default nothing.
-//
+// Setting defined convert fullname to simple name
+// TODO: Redefine base grammar
 
-#ifndef FALSE
-#define FALSE 0
-#endif
+#ifndef TO_CONST
+#define TO_CONST(_TYPE, _VALUE) (const_cast<_TYPE>(_VALUE))
+#endif /* TO_CONST */
 
-#ifndef TRUE
-#define TRUE 1
-#endif
+#ifndef TO_REINT
+#define TO_REINT(_TYPE, _VALUE) (reinterpret_cast<_TYPE>(_VALUE))
+#endif /* TO_REINT */
 
-#ifndef NULL
-#define NULL 0
-#endif
+#ifndef TO_STATIC
+#define TO_STATIC(_TYPE, _VALUE) (static_cast<_TYPE>(_VALUE))
+#endif /* TO_STATIC */
 
-// MinGW / MSVC -> Build Export dynamic link library will need ?
-// TODO: export DLL
-//        [MinGW] Linker: -Xlinker --kill-at
-//        [MinGW] Need use extren 'C'
-//
+#ifndef TO_DYNAMIC
+#define TO_DYNAMIC(_TYPE, _VALUE) (dynamic_cast<_TYPE>(_VALUE))
+#endif /* TO_DYNAMIC */
+
+// Setting Build export dynamic link library options
+// TODO: Export dll will be used in other project
+// [MinGW] C++ Linker: -Xlinker --kill-at
+// [MinGW] C Linker: It dosen't need option
 
 #ifndef DLL_EXPORT
 #define DLL_EXPORT __declspec(dllexport)
-#endif
+#endif /* DLL_EXPORT */
 
 #ifndef DLL_IMPORT
 #define DLL_IMPORT __declspec(dllimport)
-#endif
+#endif /* DLL_IMPORT */
 
 #ifndef DLL_EXPORT_C
 #define DLL_EXPORT_C extern "C" __declspec(dllexport)
-#endif
+#endif /* DLL_EXPORT_C */
 
 #ifndef DLL_IMPORT_C
 #define DLL_IMPORT_C extern "C" __declspec(dllimport)
-#endif
+#endif /* DLL_IMPORT_C */
 
-#ifndef DLLHK_EXPORT
-#define DLLHK_EXPORT __declspec(dllexport) __declspec(naked) void __cdecl
-#endif
+#ifndef DLL_EXPORT_HK
+#define DLL_EXPORT_HK __declspec(dllexport) void __cdecl
+#endif /* DLL_EXPORT_HK */
 
-#ifndef DLLHK_IMPORT
-#define DLLHK_IMPORT __declspec(dllimport) __declspec(naked) void __cdecl
-#endif
+#ifndef DLL_IMPORT_HK
+#define DLL_IMPORT_HK __declspec(dllimport) void __cdecl
+#endif /* DLL_IMPORT_HK */
 
-#ifndef DLLHK_EXPORT_C
-#define DLLHK_EXPORT_C extern "C" __declspec(dllexport) __declspec(naked) void __cdecl
-#endif
+#ifndef DLL_EXPORT_HK_C
+#define DLL_EXPORT_HK_C extern "C" __declspec(dllexport) void __cdecl
+#endif /* DLL_EXPORT_HK_C */
 
-#ifndef DLLHK_IMPORT_C
-#define DLLHK_IMPORT_C extern "C" __declspec(dllimport) __declspec(naked) void __cdecl
-#endif
+#ifndef DLL_IMPORT_HK_C
+#define DLL_IMPORT_HK_C extern "C" __declspec(dllimport) void __cdecl
+#endif /* DLL_IMPORT_HK_C */
 
-// Type convert
-// TODO: (type)valve like this convert mode is old
-//       [ static_cast ] The basic simple class convert - int，double，char | char* to int* can't not convert
-//       [ const_cast ] The const object is converted to a non-const object
-//       [ reinterpret_cast ]  Memory byte-level conversion, literally, recombines the memory content and reinterprets the contents of the address with pointers over different spans
-//       [ dynamic_cast ] Used to transform down. For example, a parent class pointer (reference) is converted into a child class pointer (reference)
+// Setting Build export dynamic link library options
+// TODO: Keep my Assembly code
 
-#ifndef CONVERT_BASE
-#define CONVERT_BASE(_TYPE, VALUE) (static_cast<_TYPE>(VALUE))
-#endif
+#ifndef DLL_EXPORT_ASM
+#define DLL_EXPORT_ASM __declspec(dllexport) __declspec(naked)
+#endif /* DLL_EXPORT */
 
-#ifndef CONVERT_NONCONST
-#define CONVERT_NONCONST(_TYPE, VALUE) (const_cast<_TYPE>(VALUE))
-#endif
+#ifndef DLL_IMPORT_ASM
+#define DLL_IMPORT_ASM __declspec(dllimport) __declspec(naked)
+#endif /* DLL_IMPORT */
 
-#ifndef CONVERT_FORCED
-#define CONVERT_FORCED(_TYPE, VALUE) (reinterpret_cast<_TYPE>(VALUE))
-#endif
+#ifndef DLL_EXPORT_ASM_C
+#define DLL_EXPORT_ASM_C extern "C" __declspec(dllexport) __declspec(naked)
+#endif /* DLL_EXPORT_C */
 
-#ifndef CONVERT_POINTER
-#define CONVERT_POINTER(_TYPE, VALUE) (dynamic_cast<_TYPE>(VALUE))
-#endif
+#ifndef DLL_IMPORT_ASM_C
+#define DLL_IMPORT_ASM_C extern "C" __declspec(dllimport) __declspec(naked)
+#endif /* DLL_IMPORT_C */
+
+#ifndef DLL_EXPORT_ASM_HK
+#define DLL_EXPORT_ASM_HK __declspec(dllexport) __declspec(naked) void __cdecl
+#endif /* DLL_EXPORT_HK */
+
+#ifndef DLL_IMPORT_ASM_HK
+#define DLL_IMPORT_ASM_HK __declspec(dllimport) __declspec(naked) void __cdecl
+#endif /* DLL_IMPORT_HK */
+
+#ifndef DLL_EXPORT_ASM_HK_C
+#define DLL_EXPORT_ASM_HK_C extern "C" __declspec(dllexport) __declspec(naked) void __cdecl
+#endif /* DLL_EXPORT_HK_C */
+
+#ifndef DLL_IMPORT_ASM_HK_C
+#define DLL_IMPORT_ASM_HK_C extern "C" __declspec(dllimport) __declspec(naked) void __cdecl
+#endif /* DLL_IMPORT_HK_C */
 
 #endif // SOURCE_OSDEFINEDS_H_

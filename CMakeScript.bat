@@ -1,97 +1,102 @@
-@ECHO OFF & PUSHD "%~DP0" && CD /D "%~DP0"
+@ECHO OFF && PUSHD "%~DP0" && CD /D "%~DP0"
 @REM @ECHO OFF & PUSHD %~DP0 & TITLE
 @REM Obfuscation batch: FEFF0D0A
 
->NUL 2>&1 REG.eXE query "HKU\S-1-5-19" || (
-    ECHO SET UAC = CreateObject^("Shell.Application"^) > "%TEMP%\Getadmin.vbs"
-    ECHO UAC.ShellExecute "%~f0", "%1", "", "runas", 1 >> "%TEMP%\Getadmin.vbs"
-    "%TEMP%\Getadmin.vbs"
-    DEL /f /q "%TEMP%\Getadmin.vbs" 2>NUL
-    Exit /b
-)
+:: >NUL 2>&1 REG.exe query "HKU\S-1-5-19" || (
+::     ECHO SET UAC = CreateObject^("Shell.Application"^) > "%TEMP%\Getadmin.vbs"
+::     ECHO UAC.ShellExecute "%~f0", "%1", "", "runas", 1 >> "%TEMP%\Getadmin.vbs"
+::     "%TEMP%\Getadmin.vbs"
+::     DEL /f /q "%TEMP%\Getadmin.vbs" 2>NUL
+::     Exit /b
+:: )
+:: 
+:: IF EXIST "%Public%" >NUL 2>&1 REG QUERY "HKU\S-1-5-19\Environment"
+:: IF NOT %errorlevel% EQU 0 (
+::     IF EXIST "%Public%" powershell.exe -windowstyle hidden -noprofile "Start-Process '%~dpnx0' -Verb RunAs"
+::     EXIT
+:: )>NUL
 
-IF EXIST "%Public%" >NUL 2>&1 REG QUERY "HKU\S-1-5-19\Environment"
-IF NOT %errorlevel% EQU 0 (
-    IF EXIST "%Public%" POWERSHELL.EXE -windowstyle hidden -noprofile "Start-Process '%~dpnx0' -Verb RunAs"
-    EXIT
-)>NUL
+:: @ECHO OFF&(PUSHD "%~DP0")&(REG QUERY "HKU\S-1-5-19">NUL 2>&1)||(
+:: powershell -Command "Start-Process '%~sdpnx0' -Verb RunAs"&&EXIT)
 
-::@ECHO OFF&(PUSHD "%~DP0")&(REG QUERY "HKU\S-1-5-19">NUL 2>&1)||(
-::POWERSHELL.EXE -Command "Start-Process '%~sdpnx0' -Verb RunAs"&&EXIT)
+:: VER|FINDSTR "5\.[0-9]\.[0-9][0-9]*" > NUL && (
+:: ECHO.&ECHO System OS Not supported WinXP &PAUSE>NUL&EXIT)
 
-::VER|FINDSTR "5\.[0-9]\.[0-9][0-9]*" > NUL && (
-::ECHO.&ECHO  WinOS Not Supported WinXP &PAUSE>NUL&EXIT)
+SET DSTLOWERCASE=a b c d e f g h i j k l m n o p q r s t u v w x y z
+SET DSTUPPERCASE=A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 
-:: //Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel
-SET MODE_BUILD=Debug
+SET TOOLMINGW=E:/Runtime/Bins/MCF/x86/bin
+SET TOOLCMAKE=E:/Runtime/Bins/WTK/CMake/x86/bin
 
-:: //Choose the type of build, options are: rc exe dll lib mod
-SET MODE_TYPES=exe
+:: //Options: Debug Release RelWithDebInfo MinSizeRel
+SET BUILDMODE=Debug
 
-:: //Choose the type of build, options are: Platform
-SET TOOL_BUILD=E:/Runtime/Bins/MCF/x86/bin
+:: //Options: exe dll lib mod
+SET BUILDTYPE=exe
 
-SET CMAKE_FILE=CMake
-SET CMAKE_TYPE=MinGW Makefiles
+SET CMAKEPATH=CMake
+SET CMAKETYPE=MinGW Makefiles
 
-SET PATH_WROOT=%CD%
-SET PATH_BUILD=%PATH_WROOT%\%MODE_BUILD%
-SET PATH_CMAKE=%PATH_WROOT%\%CMAKE_FILE%
+SET PATHWROOT=%CD%
+SET PATHBUILD=%PATHWROOT%/%BUILDMODE%
+SET PATHCACHE=%PATHWROOT%/%CMAKEPATH%
 
-:: Format String "var"
-SET ARGS_FRMAT=%*
-for /F "delims=" %%A IN ("%*") DO SET ARGS_FRMAT=%%~A
+SET PARAMETER=%*
+FOR %%A IN (%DSTLOWERCASE%) DO CALL SET PARAMETER=%%PARAMETER:%%A=%%A%%
+:: FOR %%A IN (%DSTUPPERCASE%) DO CALL SET PARAMETER=%%PARAMETER:%%A=%%A%%
 
-FOR %%A IN (%ARGS_FRMAT%) DO (
+FOR %%A IN (%PARAMETER%) DO (
+    FOR %%B IN ("clean" "clear" "cls") DO IF "%%A" EQU %%B (
+        IF EXIST "%PATHWROOT%\%CMAKEPATH%" (RMDIR /S /Q "%PATHWROOT%\%CMAKEPATH%")
+        IF EXIST "%PATHWROOT%\%BUILDMODE%" (RMDIR /S /Q "%PATHWROOT%\%BUILDMODE%")
 
-    :: Clean project
-    FOR %%B IN ("clean" "clear" "cls") DO IF "%%A"==%%B (
-        IF EXIST "%PATH_WROOT%\%CMAKE_FILE%" (RMDIR /S /Q "%PATH_WROOT%\%CMAKE_FILE%")
-
-        IF EXIST "%PATH_WROOT%\Debug" (RMDIR /S /Q "%PATH_WROOT%\Debug")
-        IF EXIST "%PATH_WROOT%\Release" (RMDIR /S /Q "%PATH_WROOT%\Release")
-        IF EXIST "%PATH_WROOT%\MinSizeRel" (RMDIR /S /Q "%PATH_WROOT%\MinSizeRel")
-        IF EXIST "%PATH_WROOT%\RelWithDebInfo" (RMDIR /S /Q "%PATH_WROOT%\RelWithDebInfo")
-        ECHO [*] Clean is done!
+        IF EXIST "%PATHWROOT%\Debug" (RMDIR /S /Q "%PATHWROOT%\Debug")
+        IF EXIST "%PATHWROOT%\Release" (RMDIR /S /Q "%PATHWROOT%\Release")
+        IF EXIST "%PATHWROOT%\MinSizeRel" (RMDIR /S /Q "%PATHWROOT%\MinSizeRel")
+        IF EXIST "%PATHWROOT%\RelWithDebInfo" (RMDIR /S /Q "%PATHWROOT%\RelWithDebInfo")
+        ECHO [*] Cleanup completed!
         EXIT
     )
 
-    FOR %%B IN ("rebuild" "rb" "re") DO IF "%%A"==%%B (
-        IF EXIST "%PATH_WROOT%\%CMAKE_FILE%" (RMDIR /S /Q "%PATH_WROOT%\%CMAKE_FILE%")
-
-        IF EXIST "%PATH_WROOT%\Debug" (RMDIR /S /Q "%PATH_WROOT%\Debug")
-        IF EXIST "%PATH_WROOT%\Release" (RMDIR /S /Q "%PATH_WROOT%\Release")
-        IF EXIST "%PATH_WROOT%\MinSizeRel" (RMDIR /S /Q "%PATH_WROOT%\MinSizeRel")
-        IF EXIST "%PATH_WROOT%\RelWithDebInfo" (RMDIR /S /Q "%PATH_WROOT%\RelWithDebInfo")
-        ECHO [*] Clean is done!
+    FOR %%B IN ("rebuild" "rb" "re") DO IF "%%A" EQU %%B (
+        IF EXIST "%PATHWROOT%\%CMAKEPATH%" (RMDIR /S /Q "%PATHWROOT%\%CMAKEPATH%")
+        IF EXIST "%PATHWROOT%\%BUILDMODE%" (RMDIR /S /Q "%PATHWROOT%\%BUILDMODE%")
+        ECHO [*] Rebuild completed!
     )
 
-    :: Setting project build vars
-    FOR %%B IN ("x32" "32") DO IF "%%A"==%%B (SET TOOL_BUILD=E:/Runtime/Bins/MCF/x86/bin)
-    FOR %%B IN ("x64" "64") DO IF "%%A"==%%B (SET TOOL_BUILD=E:/Runtime/Bins/MCF/x64/bin)
+    FOR %%B IN ("x32" "32") DO IF "%%A" EQU %%B (
+        SET TOOLMINGW=E:/Runtime/Bins/MCF/x86/bin
+        SET TOOLCMAKE=E:/Runtime/Bins/WTK/CMake/x86/bin
+        ECHO [*] Setting Project to x86!
+    )
+    FOR %%B IN ("x64" "64") DO IF "%%A" EQU %%B (
+        SET TOOLMINGW=E:/Runtime/Bins/MCF/x64/bin
+        SET TOOLCMAKE=E:/Runtime/Bins/WTK/CMake/x64/bin
+        ECHO [*] Setting Project to x64!
+    )
+ 
+    FOR %%B IN ("Debug" "debug") DO IF "%%A" EQU %%B (SET BUILDMODE=Debug)
+    FOR %%B IN ("Release" "release") DO IF "%%A" EQU %%B (SET BUILDMODE=Release)
+    FOR %%B IN ("MinSizeRel" "minsizerel") DO IF "%%A" EQU %%B (SET BUILDMODE=MinSizeRel)
+    FOR %%B IN ("RelWithDebInfo" "relwithdebinfo") DO IF "%%A" EQU %%B (SET BUILDMODE=RelWithDebInfo)
 
-    FOR %%B IN ("Debug" "debug") DO IF "%%A"==%%B (SET MODE_BUILD=Debug)
-    FOR %%B IN ("Release" "release") DO IF "%%A"==%%B (SET MODE_BUILD=Release)
-    FOR %%B IN ("MinSizeRel" "minsizerel") DO IF "%%A"==%%B (SET MODE_BUILD=MinSizeRel)
-    FOR %%B IN ("RelWithDebInfo" "relwithdebinfo") DO IF "%%A"==%%B (SET MODE_BUILD=RelWithDebInfo)
-
-    FOR %%B IN ("exe" "EXE") DO IF "%%A"==%%B (SET MODE_TYPES=exe)
-    FOR %%B IN ("dll" "DLL") DO IF "%%A"==%%B (SET MODE_TYPES=dll)
-    FOR %%B IN ("lib" "LIB") DO IF "%%A"==%%B (SET MODE_TYPES=lib)
+    FOR %%B IN ("exe" "EXE") DO IF "%%A" EQU %%B (SET BUILDTYPE=exe)
+    FOR %%B IN ("dll" "DLL") DO IF "%%A" EQU %%B (SET BUILDTYPE=dll)
+    FOR %%B IN ("lib" "LIB") DO IF "%%A" EQU %%B (SET BUILDTYPE=lib)
+    FOR %%B IN ("mod" "MOD") DO IF "%%A" EQU %%B (SET BUILDTYPE=mod)
 )
 
-:: DEBUG View
-:: ECHO %MODE_BUILD%
-:: ECHO %MODE_TYPES%
-:: ECHO Args: %*
-:: EXIT
+SET CMAKEPARM=-D CMAKE_BUILD_TYPE:STRING="%BUILDMODE%"
+SET CMAKEPARM=%CMAKEPARM% -D BUILD_BINRARY_TYPE:STRING="%BUILDTYPE%"
+SET CMAKEPARM=%CMAKEPARM% -D CMAKE_SHARED_LINKER_FLAGS:STRING="-Wl,--output-def=../%BUILDMODE%/SymbolEx.def"
+SET CMAKEPARM=%CMAKEPARM% -D CMAKE_VERBOSE_MAKEFILE:BOOL=ON -D CMAKE_C_COMPILER:STRING="%TOOLMINGW%/gcc.exe"
+SET CMAKEPARM=%CMAKEPARM% -D CMAKE_VERBOSE_MAKEFILE:BOOL=ON -D CMAKE_CXX_COMPILER:STRING="%TOOLMINGW%/g++.exe"
 
-SET CMAKE_PARM=-D CMAKE_BUILD_TYPE:STRING="%MODE_BUILD%"
-SET CMAKE_PARM=%CMAKE_PARM% -D BUILD_BINRARY_TYPE:STRING="%MODE_TYPES%"
-SET CMAKE_PARM=%CMAKE_PARM% -D CMAKE_SHARED_LINKER_FLAGS:STRING="-Wl,--output-def=../%MODE_BUILD%/APIStatus.def.txt"
-SET CMAKE_PARM=%CMAKE_PARM% -D CMAKE_VERBOSE_MAKEFILE:BOOL=ON -D CMAKE_C_COMPILER:STRING="%TOOL_BUILD%/gcc.exe"
-SET CMAKE_PARM=%CMAKE_PARM% -D CMAKE_VERBOSE_MAKEFILE:BOOL=ON -D CMAKE_CXX_COMPILER:STRING="%TOOL_BUILD%/g++.exe"
+%TOOLCMAKE%/CMAKE.EXE -G "%CMAKETYPE%" -B "%PATHCACHE%" %CMAKEPARM%
+%TOOLMINGW%/MINGW32-MAKE.EXE -C "%PATHCACHE%"
 
-CMAKE.EXE -G "%CMAKE_TYPE%" -B "%PATH_CMAKE%" %CMAKE_PARM%
-MINGW32-MAKE.EXE -C "%PATH_CMAKE%"
-:: RMDIR /S /Q "%PATH_CMAKE%\CMakeFiles" && ECHO [*] CMakeFiles has remove
+FOR %%A IN (%ERRORLEVEL%) DO (
+    IF %%A EQU 0 (ECHO [*] Build completed! Code: %%A && EXIT)
+    IF %%A EQU 2 (ECHO [!] Build failed! Code: %%A && EXIT)
+    ECHO [!] Build terminated! Code: %%A
+)

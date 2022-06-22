@@ -21,7 +21,7 @@ ENDFOREACH( OUTPUTCONFIG CMAKE_BUILD_TYPE )
 # Compile flags options: -static -mwindows|-mconsole
 #===========================================================================================
 
-SET(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS}                  ")
+SET(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -Wall            ")
 SET(CMAKE_CXX_FLAGS_DEBUG          "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG   ")
 SET(CMAKE_CXX_FLAGS_RELEASE        "${CMAKE_CXX_FLAGS_RELEASE}          ")
 SET(CMAKE_CXX_FLAGS_MINSIZEREL     "${CMAKE_CXX_FLAGS_MINSIZEREL}       ")
@@ -29,7 +29,7 @@ SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}   ")
 
 SET(CMAKE_CXX_STANDARD_LIBRARIES   "${CMAKE_CXX_STANDARD_LIBRARIES} -static -mwindows -ldbghelp -lcomctl32 ")
 
-SET(CMAKE_C_FLAGS                  "${CMAKE_C_FLAGS}                    ")
+SET(CMAKE_C_FLAGS                  "${CMAKE_C_FLAGS} -Wall              ")
 SET(CMAKE_C_FLAGS_DEBUG            "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG     ")
 SET(CMAKE_C_FLAGS_RELEASE          "${CMAKE_C_FLAGS_RELEASE}            ")
 SET(CMAKE_C_FLAGS_MINSIZEREL       "${CMAKE_C_FLAGS_MINSIZEREL}         ")
@@ -76,7 +76,6 @@ SET(CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO  "${CMAKE_MODULE_LINKER_FLAGS_RELWI
 #===========================================================================================
 
 FILE(GLOB_RECURSE PATH_SRCS_LIST 
-    "Source/Common.cpp"
     "Source/*.cpp" "Source/*.c"
     "Library/*.cpp" "Library/*.c"
 
@@ -120,8 +119,8 @@ ELSEIF(${BUILD_BINRARY_TYPE} STREQUAL "lib")
     ADD_LIBRARY("${PROJECT_NAME}" STATIC "${PATH_SRCS_LIST}")
 ELSEIF(${BUILD_BINRARY_TYPE} STREQUAL "mod")
     ADD_LIBRARY("${PROJECT_NAME}" MODULE "${PATH_SRCS_LIST}")
-ELSEIF(${BUILD_BINRARY_TYPE} STREQUAL "mod")
-    ADD_LIBRARY("${PROJECT_NAME}" MODULE "${PATH_SRCS_LIST}")
+ELSE()
+    ADD_EXECUTABLE("${PROJECT_NAME}" "${PATH_SRCS_LIST}")
 ENDIF()
 
 # TARGET_LINK_LIBRARIES("${PROJECT_NAME}" "${PATH_SRCS_LIST}")
